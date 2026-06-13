@@ -1,5 +1,7 @@
 # Car Blueprint Viewer
 
+**▶ Live demo: https://amirncode.github.io/car-blueprint-viewer/**
+
 An interactive 3D **wireframe car** you explore part by part. Orbit and zoom around a
 see-through "blueprint" car, click any component to highlight it, and read what it
 does — and crucially **what it connects to and why** — so you build a mental model of
@@ -53,5 +55,11 @@ and notes on how to extend the app.
 
 ## Deployment
 
-Deployed on **Vercel** (framework preset: Vite, output `dist/`). Pushing to `main`
-triggers a production deploy; pull requests get preview URLs.
+**Currently live on GitHub Pages** via the workflow in `.github/workflows/deploy.yml`
+— every push to `main` builds, tests, and publishes automatically (no extra setup).
+
+To host on **Vercel** instead (the originally preferred target): import the repo at
+[vercel.com/new](https://vercel.com/new). Vercel auto-detects Vite — build `npm run build`,
+output `dist/`, no config needed — and redeploys on every push, with preview URLs on PRs.
+The Vite `base` only switches to a subpath under the `GITHUB_PAGES` env var, so the
+Vercel build is served correctly from the root automatically.

@@ -32,10 +32,19 @@ theme tokens declared in CSS via `@theme`. No `tailwind.config.js` needed.
 Single small store for selection/hover/exploded/isolation/tour/search. Avoids
 prop-drilling between the 3D scene and the DOM UI panels.
 
-## Hosting: Vercel (not Netlify)
-Both work for a static SPA. Vercel chosen for zero-config Vite support, fast
-preview deployments per PR, and tight GitHub integration. Build: `vite build`,
-output `dist/`, SPA rewrite to `index.html`.
+## Hosting: live on GitHub Pages now; Vercel-ready
+Vercel was the preferred target (zero-config Vite, preview deploys, GitHub
+integration). However, deploying to Vercel requires a one-time interactive login
+that could not be performed autonomously (no token / `vercel login` is
+interactive). To deliver a working live URL without blocking on that, the app is
+deployed to **GitHub Pages** via `.github/workflows/deploy.yml` (build → test →
+deploy on every push to `main`). Live URL:
+https://amirncode.github.io/car-blueprint-viewer/
+
+The repo stays fully Vercel-ready: the Vite `base` is only set to the repo
+subpath when the `GITHUB_PAGES` env var is present, so a Vercel (or Netlify)
+build is served from the root with no config. To switch hosts, import the repo at
+vercel.com/new — nothing else needs to change.
 
 ## Testing boundary
 Pure logic (catalog integrity, store transitions) is unit-tested with Vitest.
