@@ -1,73 +1,57 @@
-# React + TypeScript + Vite
+# Car Blueprint Viewer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An interactive 3D **wireframe car** you explore part by part. Orbit and zoom around a
+see-through "blueprint" car, click any component to highlight it, and read what it
+does — and crucially **what it connects to and why** — so you build a mental model of
+how the whole machine fits together.
 
-Currently, two official plugins are available:
+The first model is a **inline-6, rear-wheel-drive, manual, internal-combustion** car
+(~35 parts across 7 systems). The geometry is built procedurally, so future variants
+(automatic, FWD/AWD, V8, turbo, EV) can be added parametrically.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- 🔵 **See-through wireframe** car with every internal part modeled (engine internals,
+  gearbox, driveshaft, differential, suspension, brakes, exhaust…)
+- 🟠 **Click to highlight** — parts glow amber with a bloom effect when selected
+- 📖 **Info panel** — each part's function plus clickable "connects to" links explaining
+  every physical connection and the reason for it
+- 📦 **Exploded view** — parts drift apart to reveal how they nest together
+- 🎯 **System isolation** — focus on a single system (drivetrain, braking…)
+- 🧭 **Guided tour** — step through the whole machine with auto-focus
+- 🔎 **Part search**
+- 📱 Works on **desktop and mobile** (touch orbit + pinch-zoom)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech stack
 
-## Expanding the ESLint configuration
+Vite · React · TypeScript · [react-three-fiber](https://r3f.docs.pmnd.rs/) +
+[drei](https://github.com/pmndrs/drei) + postprocessing (Three.js) · Zustand ·
+Tailwind CSS v4 · Vitest.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Develop
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev        # start the dev server (http://localhost:5173)
+npm test           # run the catalog + store logic tests
+npm run build      # type-check and build to dist/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Project layout
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+src/
+  data/        part catalog (single source of truth) + systems
+  store/       Zustand viewer state (selection, explode, isolation, tour, search)
+  three/       the 3D scene: procedural car geometry, materials, camera
+  components/  the HUD overlay (top bar, legend, info panel, tour bar)
+docs/          design spec, full part catalog, decisions log, project memory
+```
+
+See [`docs/`](docs/README.md) for the design spec, the full annotated part catalog,
+and notes on how to extend the app.
+
+## Deployment
+
+Deployed on **Vercel** (framework preset: Vite, output `dist/`). Pushing to `main`
+triggers a production deploy; pull requests get preview URLs.
